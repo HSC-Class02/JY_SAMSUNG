@@ -49,3 +49,18 @@ Peer firms are comparison candidates only; their financial values are not yet au
 ## Official links
 - OpenDART: https://opendart.fss.or.kr/
 - Samsung Electronics investor information: https://www.samsung.com/sec/ir/
+
+
+## Historical data import (2010-2014)
+OpenDART's standard periodic financial-information API documents coverage from 2015 onward. The repository therefore does **not** fabricate 2010-2014 figures. For those years, obtain Samsung Electronics' official annual-report/XBRL source from DART/OpenDART, normalize the verified values into the schema in `data/historical_template.csv`, and retain the filing receipt number and source link.
+
+The importer validates that all rows belong to Samsung Electronics, limits fiscal years to 2010-2014, checks required columns and report codes, rejects duplicate year/report rows in the input, and merges the verified rows into `data/financials.csv`:
+```bash
+python scripts/import_historical_csv.py path/to/verified_historical.csv
+```
+After importing, copy the resulting file to `dashboard/data/financials.csv` and commit both CSVs so GitHub Pages can publish them. **Do not treat blank template rows as real financial data.** Check each imported value and accounting unit against the official filing before publishing. The importer is a normalization/validation step, not an automatic XBRL parser.
+
+Official resources:
+- OpenDART financial-information guide: https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS003
+- OpenDART financial data and XBRL downloads: https://opendart.fss.or.kr/disclosureinfo/fnltt/xbrlnote/main.do
+- DART disclosure search: https://dart.fss.or.kr/
