@@ -1,0 +1,2 @@
+company,corp_code,fiscal_year,report_code,report_type,report_label,period_num,period_end,receipt_no,revenue,gross_profit,operating_income,pretax_income,net_income,total_assets,cash,receivables,inventory,ppe,total_liabilities,current_assets,current_liabilities,short_debt,long_debt,equity,interest_expense,depreciation,amortization,cfo,cfi,cff,capex_ppe,capex_intangible,filing_url
+삼성전자,00126380,2010,11011,annual,사업보고서,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://dart.fss.or.kr/
