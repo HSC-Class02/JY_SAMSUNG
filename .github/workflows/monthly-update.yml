@@ -1,0 +1,48 @@
+name: Monthly DART Update
+
+on:
+  schedule:
+    - cron: "0 3 1 * *" # Every month on day 1 at 12:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-dart-update
+  cancel-in-progress: false
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Fetch annual financial statements
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python scripts/fetch_financials.py
+
+      - name: Commit updated CSV
+        run: |
+          if git diff --quiet -- data/samsung_annual_financials.csv; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/samsung_annual_financials.csv
+          git commit -m "Update Samsung annual financial data"
+          git push
